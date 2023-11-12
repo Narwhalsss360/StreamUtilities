@@ -2,7 +2,6 @@
 #define StringStream_h
 
 #include "StreamConstants.h"
-#include <stdint.h>
 
 enum SEEK_ORIGIN : int64_t
 {
