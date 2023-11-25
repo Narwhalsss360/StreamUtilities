@@ -23,6 +23,6 @@ size_t readInto(Stream& stream, iterator begin, iterator end, int stop = EOF, si
     return read;
 }
 
-inline String readAll(Stream& stream, uint32_t interReadDelayus);
+String readAll(Stream& stream, uint32_t interReadDelayus);
 
 #endif

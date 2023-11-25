@@ -8,7 +8,7 @@ size_t getLine(Stream& stream, String& string, bool blocking)
     return string.length();
 }
 
-inline String readAll(Stream& stream, uint32_t interReadDelayus)
+String readAll(Stream& stream, uint32_t interReadDelayus)
 {
     String string;
     while (stream.available() && stream.peek() != EOF)
