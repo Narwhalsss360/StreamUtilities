@@ -2,6 +2,7 @@
 #define StreamReaders_h
 
 #include "StreamConstants.h"
+#include <WString.h>
 
 static constexpr bool BLOCKING = true;
 static constexpr bool NON_BLOCKING = false;
@@ -21,5 +22,7 @@ size_t readInto(Stream& stream, iterator begin, iterator end, int stop = EOF, si
     }
     return read;
 }
+
+inline String readAll(Stream& stream, uint32_t interReadDelayus);
 
 #endif
