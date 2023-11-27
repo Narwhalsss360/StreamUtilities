@@ -29,11 +29,13 @@ public:
 
     int peek();
 
-    size_t seek(int32_t offset, SEEK_ORIGIN origin = ORIGIN_CURRENT);
+    size_t seek(int32_t offset, int64_t origin = ORIGIN_CURRENT);
 
     size_t position();
 
     String& str();
+
+    String& str(const String& str);
 
     Stream& stream();
 

@@ -53,7 +53,7 @@ int StringStream::peek()
     return EOF;
 }
 
-size_t StringStream::seek(int32_t offset, SEEK_ORIGIN origin)
+size_t StringStream::seek(int32_t offset, int64_t origin)
 {
     if (length() == 0)
         return 0;
@@ -85,6 +85,11 @@ size_t StringStream::position()
 String& StringStream::str()
 {
     return *this;
+}
+
+String& StringStream::str(const String& str)
+{
+    return ((String&)(*this) = str);
 }
 
 Stream& StringStream::stream()
