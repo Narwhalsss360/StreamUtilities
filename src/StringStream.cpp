@@ -36,6 +36,8 @@ int StringStream::available()
 {
     if (length() == 0)
         return 0;
+    if (length() <= stringPosition)
+        stringPosition = length() - 1;
     return length() - stringPosition - 1;
 }
 
@@ -79,6 +81,8 @@ size_t StringStream::seek(int32_t offset, int64_t origin)
 
 size_t StringStream::position()
 {
+    if (length() <= stringPosition)
+        stringPosition = length() - 1;
     return stringPosition;
 }
 
