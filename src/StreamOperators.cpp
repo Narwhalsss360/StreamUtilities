@@ -1,39 +1,77 @@
 #include "StreamOperators.h"
+#include "StreamReaders.h"
+#include <NFuncs.h>
 
 #pragma region BitShift Left
-Stream& operator<<(Stream& stream, uint32_t value)
+Stream& operator<<(Stream& stream, const unsigned char& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, int32_t value)
+Stream& operator<<(Stream& stream, const char& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, int64_t value)
+Stream& operator<<(Stream& stream, const unsigned short& value)
 {
-    if (value < 0)
-        stream.write('-');
-    stream.print(ulltostr(labs(value)));
+    stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, uint64_t value)
+Stream& operator<<(Stream& stream, const short& value)
+{
+    stream.print(value);
+    return stream;
+}
+
+Stream& operator<<(Stream& stream, const unsigned int& value)
+{
+    stream.print(value);
+    return stream;
+}
+
+Stream& operator<<(Stream& stream, const int& value)
+{
+    stream.print(value);
+    return stream;
+}
+
+Stream& operator<<(Stream& stream, const unsigned long& value)
+{
+    stream.print(value);
+    return stream;
+}
+
+Stream& operator<<(Stream& stream, const long& value)
+{
+    stream.print(value);
+    return stream;
+}
+
+Stream& operator<<(Stream& stream, const unsigned long long& value)
 {
     stream.print(ulltostr(value));
     return stream;
 }
 
-Stream& operator<<(Stream& stream, double value)
+Stream& operator<<(Stream& stream, const long long& value)
 {
-    stream.print(value);
+    if (value < 0)
+    {
+        stream << '-';
+        stream << (unsigned long long)(-1 * value);
+    }
+    else
+    {
+        stream << (unsigned long long)value;
+    }
     return stream;
 }
 
-Stream& operator<<(Stream& stream, char value)
+Stream& operator<<(Stream& stream, const double& value)
 {
     stream.print(value);
     return stream;
@@ -54,30 +92,148 @@ Stream& operator<<(Stream& stream, const Printable& value)
 #pragma endregion
 
 #pragma region BitShift Right
-Stream& operator>>(Stream& stream, uint32_t& value)
+Stream& operator>>(Stream& stream, unsigned char& value)
 {
-    String read = stream.readStringUntil(' ');
+    if (!stream.available() || stream.peek() == EOF)
+        value = '\0';
+    else
+        value = stream.read();
+    return stream;
+}
+
+Stream& operator>>(Stream& stream, char& value)
+{
+    if (!stream.available() || stream.peek() == EOF)
+        value = '\0';
+    else
+        value = stream.read();
+    return stream;
+}
+
+Stream& operator>>(Stream& stream, unsigned short& value)
+{
+    String read;
+    stream >> read;
+    for (const char& c : read)
+    {
+        if (!isDigit(c))
+        {
+            return stream;
+        }
+    }
+
+    value = atoi(read.c_str());
+    return stream;
+}
+
+Stream& operator>>(Stream& stream, short& value)
+{
+    String read;
+    stream >> read;
+    for (const char& c : read)
+    {
+        if (!isDigit(c))
+        {
+            return stream;
+        }
+    }
+
+    value = atoi(read.c_str());
+    return stream;
+}
+
+Stream& operator>>(Stream& stream, unsigned int& value)
+{
+    String read;
+    stream >> read;
+    for (const char& c : read)
+    {
+        if (!isDigit(c))
+        {
+            return stream;
+        }
+    }
+
+    value = atoi(read.c_str());
+    return stream;
+}
+
+Stream& operator>>(Stream& stream, int& value)
+{
+    String read;
+    stream >> read;
+    for (const char& c : read)
+    {
+        if (!isDigit(c))
+        {
+            return stream;
+        }
+    }
+
+    value = atoi(read.c_str()); 
+    return stream;
+}
+
+Stream& operator>>(Stream& stream, unsigned long& value)
+{
+    String read;
+    stream >> read;
+    for (const char& c : read)
+    {
+        if (!isDigit(c))
+        {
+            return stream;
+        }
+    }
+
     value = atol(read.c_str());
     return stream;
 }
 
-Stream& operator>>(Stream& stream, int32_t& value)
+Stream& operator>>(Stream& stream, long& value)
 {
-    String read = stream.readStringUntil(' ');
+    String read;
+    stream >> read;
+    for (const char& c : read)
+    {
+        if (!isDigit(c))
+        {
+            return stream;
+        }
+    }
+
     value = atol(read.c_str());
     return stream;
 }
 
-Stream& operator>>(Stream& stream, int64_t& value)
+Stream& operator>>(Stream& stream, unsigned long long& value)
 {
-    String read = stream.readStringUntil(' ');
+    String read;
+    stream >> read;
+    for (const char& c : read)
+    {
+        if (!isDigit(c))
+        {
+            return stream;
+        }
+    }
+
     value = atol(read.c_str());
     return stream;
 }
 
-Stream& operator>>(Stream& stream, uint64_t& value)
+Stream& operator>>(Stream& stream, long long& value)
 {
-    String read = stream.readStringUntil(' ');
+    String read;
+    stream >> read;
+    for (const char& c : read)
+    {
+        if (!isDigit(c))
+        {
+            return stream;
+        }
+    }
+
     value = atol(read.c_str());
     return stream;
 }
@@ -89,15 +245,9 @@ Stream& operator>>(Stream& stream, double& value)
     return stream;
 }
 
-Stream& operator>>(Stream& stream, char& value)
-{
-    value = stream.read();
-    return stream;
-}
-
 Stream& operator>>(Stream& stream, String& value)
 {
-    value = stream.readStringUntil(' ');
+    value = readUntil(stream, ' ', BLOCKING, 8);
     return stream;
 }
 #pragma endregion
