@@ -4,31 +4,33 @@
 #include "StreamConstants.h"
 
 #pragma region BitShift Left
-Stream& operator<<(Stream& stream, const unsigned char& value);
+Print& operator<<(Print& stream, const unsigned char& value);
 
-Stream& operator<<(Stream& stream, const char& value);
+Print& operator<<(Print& stream, const char& value);
 
-Stream& operator<<(Stream& stream, const unsigned short& value);
+Print& operator<<(Print& stream, const unsigned short& value);
 
-Stream& operator<<(Stream& stream, const short& value);
+Print& operator<<(Print& stream, const short& value);
 
-Stream& operator<<(Stream& stream, const unsigned int& value);
+Print& operator<<(Print& stream, const unsigned int& value);
 
-Stream& operator<<(Stream& stream, const int& value);
+Print& operator<<(Print& stream, const int& value);
 
-Stream& operator<<(Stream& stream, const unsigned long& value);
+Print& operator<<(Print& stream, const unsigned long& value);
 
-Stream& operator<<(Stream& stream, const long& value);
+Print& operator<<(Print& stream, const long& value);
 
-Stream& operator<<(Stream& stream, const unsigned long long& value);
+Print& operator<<(Print& stream, const unsigned long long& value);
 
-Stream& operator<<(Stream& stream, const long long& value);
+Print& operator<<(Print& stream, const long long& value);
 
-Stream& operator<<(Stream& stream, const double& value);
+Print& operator<<(Print& stream, const double& value);
 
-Stream& operator<<(Stream& stream, const String& value);
+Print& operator<<(Print& stream, const String& value);
 
-Stream& operator<<(Stream& stream, const Printable& value);
+Print& operator<<(Print& stream, const Printable& value);
+
+Print& operator<<(Print& stream, Print& (*manipulator)(Print&));
 #pragma endregion
 
 #pragma region BitShift Right

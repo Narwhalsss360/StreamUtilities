@@ -3,61 +3,61 @@
 #include <NFuncs.h>
 
 #pragma region BitShift Left
-Stream& operator<<(Stream& stream, const unsigned char& value)
+Print& operator<<(Print& stream, const unsigned char& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const char& value)
+Print& operator<<(Print& stream, const char& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const unsigned short& value)
+Print& operator<<(Print& stream, const unsigned short& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const short& value)
+Print& operator<<(Print& stream, const short& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const unsigned int& value)
+Print& operator<<(Print& stream, const unsigned int& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const int& value)
+Print& operator<<(Print& stream, const int& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const unsigned long& value)
+Print& operator<<(Print& stream, const unsigned long& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const long& value)
+Print& operator<<(Print& stream, const long& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const unsigned long long& value)
+Print& operator<<(Print& stream, const unsigned long long& value)
 {
     stream.print(ulltostr(value));
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const long long& value)
+Print& operator<<(Print& stream, const long long& value)
 {
     if (value < 0)
     {
@@ -71,24 +71,28 @@ Stream& operator<<(Stream& stream, const long long& value)
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const double& value)
+Print& operator<<(Print& stream, const double& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const String& value)
+Print& operator<<(Print& stream, const String& value)
 {
     stream.print(value);
     return stream;
 }
 
-Stream& operator<<(Stream& stream, const Printable& value)
+Print& operator<<(Print& stream, const Printable& value)
 {
     stream.print(value);
     return stream;
 }
 
+Print& operator<<(Print& stream, Print& (*manipulator)(Print&))
+{
+    return manipulator(stream);
+}
 #pragma endregion
 
 #pragma region BitShift Right
