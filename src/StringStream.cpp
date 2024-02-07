@@ -21,7 +21,8 @@ size_t StringStream::write(uint8_t value)
 {
     if (!availableForWrite())
         return 0;
-    concat(value);
+    concat((char)value);
+    return 1;
 }
 
 int StringStream::availableForWrite()
