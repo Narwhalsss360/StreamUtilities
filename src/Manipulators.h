@@ -3,22 +3,10 @@
 
 #include "StreamConstants.h"
 
-Print& flush(Print& print)
-{
-    print.flush();
-    return print;
-}
+Print& flush(Print& print);
 
-Print& endl(Print& print)
-{
-    print.write('\n');
-    return flush(print);
-}
+Print& endl(Print& print);
 
-Print& ends(Print& print)
-{
-    print.write('\0');
-    return print;
-}
+Print& ends(Print& print);
 
 #endif
