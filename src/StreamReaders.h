@@ -27,4 +27,6 @@ String readAll(Stream& stream, uint32_t interReadDelayus);
 
 String readUntil(Stream& stream, char terminator, bool block = NON_BLOCKING, unsigned int interReadDelayus = 0);
 
+String readUntil(Stream& stream, char* terminators, size_t terminatorCount, bool block, unsigned int interReadDelayus);
+
 #endif
