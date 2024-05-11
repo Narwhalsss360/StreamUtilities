@@ -8,5 +8,6 @@
 #include "Manipulators.h"
 #include "StringStream.h"
 #include "MemoryStream.h"
+#include "Terminal.h"
 
 #endif

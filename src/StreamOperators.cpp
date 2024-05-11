@@ -251,7 +251,8 @@ Stream& operator>>(Stream& stream, double& value)
 
 Stream& operator>>(Stream& stream, String& value)
 {
-    value = readUntil(stream, ' ', BLOCKING, 8);
+    value = "";
+    value = readUntil(stream, [](int c) { return c <= ' '; }, [](int c) { return c > ' '; });
     return stream;
 }
 #pragma endregion

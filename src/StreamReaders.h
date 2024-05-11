@@ -4,29 +4,37 @@
 #include "StreamConstants.h"
 #include <WString.h>
 
-static constexpr bool BLOCKING = true;
-static constexpr bool NON_BLOCKING = false;
-static constexpr int NON_STOPPING = -2;
-
-size_t getLine(Stream& stream, String& string, bool block = BLOCKING);
-
-template <typename iterator>
-size_t readInto(Stream& stream, iterator begin, iterator end, int stop = EOF, size_t count = SIZE_MAX)
+namespace StreamReaders
 {
-    size_t read = 0;
-    while ((stop == NON_STOPPING ? true : (stream.available() && stream.peek() != stop)) && --count && begin != end)
-    {
-        *begin = stream.read();
-        read++;
-        ++begin;
-    }
-    return read;
+    using Reader = int (*)(Stream&);
+
+    using Peeker = int (*)(Stream&);
+
+    int peek(Stream& stream);
+
+    int read(Stream& stream);
+
+    int timedPeek(Stream& stream);
+
+    int timedRead(Stream& stream);
+
+    int blockingPeek(Stream& stream);
+
+    int blockingRead(Stream& stream);
+
+    const constexpr Reader DEFAULT_READER = read;
+
+    const constexpr Peeker DEFAULT_PEEKER = timedPeek;
 }
 
-String readAll(Stream& stream, uint32_t interReadDelayus);
+size_t getLine(Stream& stream, String& string, StreamReaders::Reader reader = StreamReaders::read, StreamReaders::Peeker peeker = StreamReaders::blockingPeek);
 
-String readUntil(Stream& stream, char terminator, bool block = NON_BLOCKING, unsigned int interReadDelayus = 0);
+String readAll(Stream& stream, StreamReaders::Reader reader = StreamReaders::read, StreamReaders::Peeker peeker = StreamReaders::timedPeek);
 
-String readUntil(Stream& stream, char* terminators, size_t terminatorCount, bool block, unsigned int interReadDelayus);
+String readUntil(Stream& stream, char* terminators, size_t terminatorCount, StreamReaders::Reader reader = StreamReaders::read, StreamReaders::Peeker peeker = StreamReaders::timedPeek);
+
+String readUntil(Stream& stream, bool (*stopPredicate)(int), StreamReaders::Reader reader = StreamReaders::read, StreamReaders::Peeker peeker = StreamReaders::blockingPeek);
+
+String readUntil(Stream& stream, bool (*stopPredicate)(int), bool (*accept)(int), StreamReaders::Reader reader = StreamReaders::read, StreamReaders::Peeker peeker = StreamReaders::blockingPeek);
 
 #endif

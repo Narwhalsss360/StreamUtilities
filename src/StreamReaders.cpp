@@ -1,59 +1,124 @@
 #include "StreamReaders.h"
 #include <Arduino.h>
 
-size_t getLine(Stream& stream, String& string, bool blocking)
+namespace StreamReaders
 {
-    while (stream.peek() != '\n' && (blocking || (stream.available() && stream.peek() != EOF)))
-        string += stream.read();
-    return string.length();
+    int peek(Stream& stream)
+    {
+        return stream.peek();
+    }
+
+    int read(Stream& stream)
+    {
+        return stream.read();
+    }
+
+    int timedPeek(Stream& stream)
+    {
+        int c;
+        unsigned long start = millis();
+        do
+        {
+            c = stream.peek();
+            if (c >= 0)
+                return c;
+        } while (millis() - start < stream.getTimeout());
+        stream.read();
+        return c;
+    }
+
+    int timedRead(Stream& stream)
+    {
+        int c;
+        unsigned long start = millis();
+        do
+        {
+            c = stream.read();
+            if (c >= 0)
+                return c;
+        } while (millis() - start < stream.getTimeout());
+        stream.read();
+        return c;
+    }
+
+    int blockingPeek(Stream& stream)
+    {
+        int c;
+        do
+        {
+            c = stream.peek();
+            if (c >= 0)
+                return c;
+        } while (true);
+    }
+
+    int blockingRead(Stream& stream)
+    {
+        int c;
+        do
+        {
+            c = stream.read();
+            if (c >= 0)
+                return c;
+        } while (true);
+    }
 }
 
-String readAll(Stream& stream, uint32_t interReadDelayus)
+using namespace StreamReaders;
+
+size_t getLine(Stream& stream, String& string, Reader reader, Peeker peeker)
+{
+    size_t count = 0;
+    while (peeker(stream) != '\n' && peeker(stream) >= 0)
+    {
+        string += reader(stream);
+        count++;
+    }
+    return count;
+}
+
+String readAll(Stream& stream, Reader reader, Peeker peeker)
 {
     String string;
-    while (stream.available() && stream.peek() != EOF)
-    {
-        string += (char)stream.read();
-        delayMicroseconds(interReadDelayus);
-    }
+    while (peeker(stream) >= 0)
+        string += (char)reader(stream);
     return string;
-}
-
-String readUntil(Stream& stream, char terminator, bool block, unsigned int interReadDelayus)
-{
-    while (!stream.available() && block);
-    delay(interReadDelayus * 2);
-    String read;
-    while (stream.available() && stream.peek() != EOF && stream.peek() != terminator)
-    {
-        delayMicroseconds(interReadDelayus);
-        read += (char)stream.read();
-    }
-    return read;
 }
 
 static bool contains(char* array, size_t size, char item)
 {
     for (size_t i = 0; i < size; i++)
-    {
         if (array[i] == item)
-        {
             return true;
-        }
-    }
-
     return false;
 }
 
-String readUntil(Stream& stream, char* terminators, size_t terminatorCount, bool block, unsigned int interReadDelayus)
+String readUntil(Stream& stream, char* terminators, size_t terminatorCount, Reader reader, Peeker peeker)
 {
-    while (!stream.available() && block);
-    delay(interReadDelayus * 2);
     String read;
-    while (stream.available() && stream.peek() != EOF && !contains(terminators, terminatorCount, stream.peek()))
+    while (peeker(stream) >= 0 && !contains(terminators, terminatorCount, peeker(stream)))
+        read += (char)reader(stream);
+    return read;
+}
+
+String readUntil(Stream& stream, bool (*stopPredicate)(int), StreamReaders::Reader reader, StreamReaders::Peeker peeker)
+{
+    String read;
+    while (!stopPredicate(peeker(stream)))
+        read += (char)reader(stream);
+    return read;
+}
+
+String readUntil(Stream& stream, bool (*stopPredicate)(int), bool (*accept)(int), StreamReaders::Reader reader = StreamReaders::read, StreamReaders::Peeker peeker = StreamReaders::blockingPeek)
+{
+    String read;
+    do
     {
-        delayMicroseconds(interReadDelayus);
-        read += (char)stream.read();
-    }
+        if (accept(peeker(stream)))
+            read += (char)reader(stream);
+        else
+            reader(stream);
+    } while (!stopPredicate(peeker(stream)));
+
     return read;
 }
