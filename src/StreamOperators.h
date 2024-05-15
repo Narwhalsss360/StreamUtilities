@@ -2,6 +2,7 @@
 #define StreamOperators_h
 
 #include "StreamConstants.h"
+#include "StreamReaders.h"
 
 #pragma region BitShift Left
 Print& operator<<(Print& stream, const unsigned char& value);
@@ -55,6 +56,10 @@ Stream& operator>>(Stream& stream, unsigned long long& value);
 Stream& operator>>(Stream& stream, long long& value);
 
 Stream& operator>>(Stream& stream, double& value);
+
+extern StreamReaders::Reader OperatorReader;
+
+extern StreamReaders::Peeker OperatorPeeker;
 
 Stream& operator>>(Stream& stream, String& value);
 #pragma endregion

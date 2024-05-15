@@ -2,6 +2,8 @@
 #include "StreamReaders.h"
 #include <NFuncs.h>
 
+using namespace StreamReaders;
+
 #pragma region BitShift Left
 Print& operator<<(Print& stream, const unsigned char& value)
 {
@@ -249,10 +251,16 @@ Stream& operator>>(Stream& stream, double& value)
     return stream;
 }
 
+Reader OperatorReader = read;
+Peeker OperatorPeeker = blockingPeek;
+
 Stream& operator>>(Stream& stream, String& value)
 {
+    Reader reader = OperatorReader ? OperatorReader : read;
+    Peeker peeker = OperatorPeeker ? OperatorPeeker : blockingPeek;
+
     value = "";
-    value = readUntil(stream, [](int c) { return c <= ' '; }, [](int c) { return c > ' '; });
+    value = readUntil(stream, [](int c) { return c <= ' '; }, [](int c) { return c > ' '; }, reader, peeker);
     return stream;
 }
 #pragma endregion
