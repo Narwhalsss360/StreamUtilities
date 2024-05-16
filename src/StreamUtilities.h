@@ -4,6 +4,7 @@
 #include "StreamConstants.h"
 #include "StreamRouters.h"
 #include "StreamReaders.h"
+#include "YieldReaders.h"
 #include "StreamOperators.h"
 #include "Manipulators.h"
 #include "StringStream.h"
