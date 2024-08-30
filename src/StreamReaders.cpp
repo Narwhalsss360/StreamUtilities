@@ -109,7 +109,7 @@ String readUntil(Stream& stream, bool (*stopPredicate)(int), StreamReaders::Read
     return read;
 }
 
-String readUntil(Stream& stream, bool (*stopPredicate)(int), bool (*accept)(int), StreamReaders::Reader reader = StreamReaders::read, StreamReaders::Peeker peeker = StreamReaders::blockingPeek)
+String readUntil(Stream& stream, bool (*stopPredicate)(int), bool (*accept)(int), StreamReaders::Reader reader, StreamReaders::Peeker peeker)
 {
     String read;
     do
