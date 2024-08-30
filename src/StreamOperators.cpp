@@ -256,7 +256,7 @@ Peeker OperatorPeeker = blockingPeek;
 
 Stream& operator>>(Stream& stream, String& value)
 {
-    Reader reader = OperatorReader ? OperatorReader : read;
+    Reader reader = OperatorReader ? OperatorReader : StreamReaders::read;
     Peeker peeker = OperatorPeeker ? OperatorPeeker : blockingPeek;
 
     value = "";
